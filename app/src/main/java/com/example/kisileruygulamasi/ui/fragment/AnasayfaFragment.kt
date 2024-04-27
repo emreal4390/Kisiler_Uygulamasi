@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView.OnQueryTextListener
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kisileruygulamasi.R
@@ -15,23 +16,17 @@ import com.example.kisileruygulamasi.databinding.FragmentAnasayfaBinding
 import com.example.kisileruygulamasi.ui.adapter.KisilerAdapter
 import java.util.ArrayList
 
-
 class AnasayfaFragment : Fragment() {
-
 private lateinit var binding: FragmentAnasayfaBinding
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        binding=FragmentAnasayfaBinding.inflate(inflater,container,false)
+        binding=DataBindingUtil.inflate(inflater,R.layout.fragment_anasayfa,container,false)
+        binding.anasayfaFragment=this
 
-        binding.toolbarAnasayfa.title="KİŞİLER"
-
-        binding.rv.layoutManager=LinearLayoutManager(requireContext())
+        binding.anasayfaToolbarBaslik="KİŞİLER"
 
         val kisilerListesi=ArrayList<Kisiler>()
         val k1=Kisiler(1,"Ahmet","1111")
@@ -43,30 +38,25 @@ private lateinit var binding: FragmentAnasayfaBinding
         kisilerListesi.add(k3)
 
         val kisilerAdapter=KisilerAdapter(requireContext(),kisilerListesi)
-        binding.rv.adapter=kisilerAdapter
-
-        binding.fab.setOnClickListener{
-            Navigation.findNavController(it).navigate(R.id.kisiKayitGecis)
-        }
+        binding.kisilerAdapter=kisilerAdapter
 
         binding.searchView.setOnQueryTextListener(object : OnQueryTextListener{
             override fun onQueryTextChange(newText: String): Boolean {
                 ara(newText)
                 return true
             }
-
             override fun onQueryTextSubmit(query: String): Boolean {
                 ara(query)
                 return true
             }
         })
-
-
         return binding.root
     }
-
 fun ara(aramaKelimesi:String){
     Log.e("Kişi Ara",aramaKelimesi)
 }
+    fun fabTikla(it:View){
+        Navigation.findNavController(it).navigate(R.id.kisiKayitGecis)
+    }
             }
 
